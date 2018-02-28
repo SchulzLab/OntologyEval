@@ -15,8 +15,7 @@ load.Ontology<-function(filename=NULL){
   }
   ontology.scores<-read.table(filename)
   if (dim(ontology.scores)[2]!=3){
-    cat("Ontology scores table must contain exactly three columns without a header:  <T1> tab <T2> tab <Cell Ontology Similarity>")
-    q("no")
+    stop("Ontology scores table must contain exactly three columns without a header:  <T1> tab <T2> tab <Cell Ontology Similarity>")
   }
   colnames(ontology.scores)<-c("T1","T2","Similarity")
   return(ontology.scores)
@@ -31,12 +30,10 @@ load.Idx2Term<-function(filename=NULL){
   }
   ontology.idx2termid<-read.table(filename)
   if (dim(ontology.idx2termid)[1]==0){
-    cat("Index to Cell Ontology term mapping must provid at least one entry")
-    q("no")
+    stop("Index to Cell Ontology term mapping must provid at least one entry")
   }
   if (dim(ontology.idx2termid)[2]!=2){
-    cat("Index to Cell Ontology Term mapping must contain only two columns without a header:  <Index> tab <Cell Ontology Term>")
-    q("no")
+    stop("Index to Cell Ontology Term mapping must contain only two columns without a header:  <Index> tab <Cell Ontology Term>")
   }
   colnames(ontology.idx2termid)<-c("Index","CLTermID")
   indices<-ontology.idx2termid$Index
@@ -53,12 +50,10 @@ load.Sample2Term<-function(filename=NULL){
   }
   ontology.sample2termid<-read.table(filename)
   if (dim(ontology.sample2termid)[1]==0){
-    cat("Sample to Cell Ontology Term mapping must contain at least one entry.")
-   q("no")
+    stop("Sample to Cell Ontology Term mapping must contain at least one entry.")
   }
   if (dim(ontology.sample2termid)[2]!=2){
-    cat("Sample to Cell Ontology Term mapping must contain only two columns without a header:  <Sample ID> tab <Cell Ontology Term>")
-    q("no")
+    stop("Sample to Cell Ontology Term mapping must contain only two columns without a header:  <Sample ID> tab <Cell Ontology Term>")
   }
   colnames(ontology.sample2termid)<-c("SampleID","CLTermID")
   ontology.sample2termid$CLTermID<-as.character(ontology.sample2termid$CLTermID)
@@ -69,21 +64,16 @@ load.Sample2Term<-function(filename=NULL){
 ###Loading score matrix###
 ##########################
 load.ObservedScoreMatrix<-function(filename=NULL){
-  if (is.null(filename)){
-    filename="Data/ExampleData.rds"
-  }
   if (tools::file_ext(filename)=="rds"){
     ObservedScoreMatrix<-readRDS(filename)
   }else{
     ObservedScoreMatrix<-read.table(filename,header=T,row.names=1, stringsAsFactors = F)
   }
   if (dim(ObservedScoreMatrix)[2]==0){
-    cat("No samples contained in data")
-    q("no")
+    stop("No samples contained in data")
   }
   if (dim(ObservedScoreMatrix)[1]==0){
-    cat("No genes contained in data")
-    q("no")
+    stop("No genes contained in data")
   }
   return(ObservedScoreMatrix)
 }
@@ -118,7 +108,7 @@ compute.Ontology.Distance<-function(similarities, idxMap, sampleMap){
                             print(cond);
                             return(NA)})
     if (is.na(firstIndex)){
-      q("no")
+      stop("Index could not be matched")
     }
     for (j in c(i:dim(sampleMap)[1])){
       #Retrieve CL term for sample j and map that to its index. Throws an error if the index can't be found in the term to index map
@@ -127,7 +117,7 @@ compute.Ontology.Distance<-function(similarities, idxMap, sampleMap){
         print(cond);
         return(NA)})
       if (is.na(secondIndex)){
-      q("no")
+        stop("Index could not be matched")
       }
       #Due to the design of the ontology file, we need to make sure that firstIndex <= secondIndex
       if (firstIndex > secondIndex){
@@ -200,35 +190,64 @@ generateBoxPlot<-function(ontology.score,fontsize=20,pngFile=NULL){
 ##########
 ###main###
 ##########
+###############################
+###Parsing command arguments###
+###############################
+if(length(args) < 1) {
+	cat("No arguments provided, running example. To show help, use the --help option")
+}
+
+if("--help" %in% args) {
+          cat("
+          OntologyEval computes an ontology score assessing sample similarity compared to an ontology based reference.\n
+          Arguments:
+          --Ontology: The ontology file to be used. Default is Data/cosinesim.tsv. \n
+	--Idx2Term: The index to ontology term mapping file. Default is Data/idx2termid.tsv, \n
+	--Sample2Term: The sampleID to ontology term mapping file. Default is the example file Data/Example_Terms.txt, \n
+	--ObservedScoreMatrx: The matrix holding observed data, either in rds or txt format. Default is the example file Data/ExampleData.rds. \n
+	--ObservedSimMethod: The method to assess similarity across the PCs on the observed data. Can be any of pearson, spearman, kendall. Default is spearman. \n
+	--OntologySimMethod: The method to assess similarity across the distance vectors. Can be any of pearson, spearman, kendall. Default is spearman. \n
+	--Output: Name of the output file holding the ontology scores. Default is Ontology_Score_Output.txt,\n
+	--fontsize: fontsize to be used in a boxplot if generated. Default is 20. \n
+	--Log2: TRUE (default) if observed data should be logarithmized, FALSE otherwise.\n
+	--Center: TRUE (default) if observed data should be centered at 0, FALSE otherwise. \n
+	--Scale: TRUE (default) if observed data should be scaled between 0 and 1, FALSE otherwise. \n
+	--nPCA: Number of PC components to be considered to compute the distance on observed data. Default is 4.\n
+	")
+	stop("")
+}
+
 parseArgs <- function(x) strsplit(sub("^--", "", x), "=")
 argsDF <- as.data.frame(do.call("rbind", parseArgs(args)))
 argsList <- as.list(as.character(argsDF$V2))
-names(argsList) <- argsDF$V1
+try(names(argsList) <- argsDF$V1)
 cat("Parsing parameters")
 if(is.null(argsList$Ontology)) {
   cat("No ontology file specified. Using default ontology file cosinesim.tsv\n")
+  argsList$Ontology<-filename<-"Data/cosinesim.tsv"
 }
 
 if(is.null(argsList$Idx2Term)) {
   cat("No index to term mapping is specified. Using default mapping file idx2termid.tsv.\nThe file is supposed to be a 2 column file with row indices in the first, and Ontology IDs in the second column.\n")
+  argsList$Idx2Term<-"Data/idx2termid.tsv"
 }
 
 if(is.null(argsList$Sample2Term)) {
   cat("No sample to term mapping is specified. Using example mapping file Example_Terms.txt.\nThe file is supposed to be a 2 column file with SampleIDs in the first, and Ontology IDs in the second column.\n")
+  argsList$Sample2Term<-"Data/Example_Terms.txt"
 }
 
 if(is.null(argsList$OberservedScoreMatrix)) {
   cat("No sample to term mapping is specified. Using example mapping file ExampleData.rds.\n")
+  argsList$OberservedScoreMatrix<-"Data/ExampleData.rds"
 }
 
 if(is.null(argsList$ObservedSimMethod)) {
-  cat("Using spearman correlation to assess similiarty of PC components of observed data.\n")
   argsList$ObservedSimMethod<-"spearman"
 }
 
-if(is.null(argsList$ObservedSimMethod)) {
-  cat("Using spearman correlation to assess similiarty of observed and expected data.\n")
-  argsList$ObservedSimMethod<-"spearman"
+if(is.null(argsList$OntologySimMethod)) {
+  argsList$OntologySimMethod<-"spearman"
 }
 
 if(is.null(argsList$Output)) {
@@ -237,19 +256,36 @@ if(is.null(argsList$Output)) {
 }
 
 if(is.null(argsList$fontsize)) {
-  cat("Setting fontsize to 20.\n")
   argsList$fontsize<-20
 }
 
+if(is.null(argsList$Log2)) {
+  argsList$Log2<-TRUE
+}
+
+if(is.null(argsList$Center)) {
+  argsList$Center<-TRUE
+}
+
+if(is.null(argsList$Scale)) {
+  argsList$Scale<-TRUE
+}
+
+if(is.null(argsList$nPCA)) {
+  argsList$nPCA<-as.numeric(4)
+}
+##########################
+###Executing procedures###
+##########################
 cat("Loading ontology based similarities\n")
 Ontology<-load.Ontology(filename=argsList$Ontology)
 cat("Loading mapping files\n")
 Idx2Term<-load.Idx2Term(filename=argsList$Idx2Term)
 Sample2Term<-load.Sample2Term(filename=argsList$Sample2Term)
 cat("Loading observed data matrix and converting it to a distance matrix\n")
-OberservedScoreMatrix<-load.ObservedScoreMatrix(filename=argsList$ObservedScores)
+OberservedScoreMatrix<-load.ObservedScoreMatrix(filename=argsList$OberservedScoreMatrix)
 ontology.distance.matrix<-compute.Ontology.Distance(Ontology, Idx2Term, Sample2Term)
-observed.distance.matrix<-compute.Observed.Distance(OberservedScoreMatrix,method=argsList$ObservedSimMethod)
+observed.distance.matrix<-compute.Observed.Distance(OberservedScoreMatrix,Log2=argsList$Log2,Center=argsList$Center,Scale=argsList$Scale,nPCA=argsList$nPCA,method=argsList$ObservedSimMethod)
 cat("Computing ontology score\n")
 ontology.score<-compute.Ontology.Score(ontology.distance.matrix, observed.distance.matrix, Sample2Term, method=argsList$OntologySimMethod)
 save.ontology.score(ontology.score, filename = argsList$Output)
