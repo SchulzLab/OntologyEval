@@ -105,11 +105,11 @@ This will generate the output file *Ontology_Score_Output.txt*, which contains p
 	SRR815140_Liver 0.788230948858356       CL:0000182
 	SRR815711_Liver 0.773573493946729       CL:0000182
 
-By providing a the *pngFile* parameter a boxplot will be generated visualzing the scores across the CL terms:
+By providing the *pngFile* parameter a boxplot will be generated visualzing the scores across the CL terms:
 
 	Rscript computeOntologyScore.R --pngFile="Example.png"
 
-! [Example boxplot] [README_Figure.png]
+<img src="https://github.com/SchulzLab/OntologyEval/blob/master/README_Figure.png" alt="Drawing" style="width: 180;"/>
 
 ## Generating Manuscript Figures
 We provide all generated result files and R-Code to recreate the main and supplementary Figures included in the manuscript.  
