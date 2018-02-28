@@ -112,7 +112,9 @@ By providing a the *pngFile* parameter a boxplot will be generated visualzing th
 ! [Example boxplot] [README_Figure.png]
 
 ## Generating Manuscript Figures
-We provide all generated result files and R-Code to recreate the main and supplementary Figures included in the manuscript.  To generate the Figures *ggplot2* needs to be installed.
+We provide all generated result files and R-Code to recreate the main and supplementary Figures included in the manuscript.  
+To generate the Figures, the R-packages *ggplot2*, *ggpubr*, and *gridExtra* need to be installed.
+
 Enter the folder *Figures*:
 	
 	cd Figures
@@ -122,9 +124,9 @@ Here, we provide Rscripts to generate each main and corresponding supplementary 
  - generateFigure3.R
  - generateFigure4.R
  - generateFigure5.R
- - generateAdditionalSupFigures.R
 
  The necessary data is loaded automatically in the Rscripts. They need to be started from this directory by typing:
  
 	Rscript generateFigure2.R
-Figures are stored both in *svg* and *pdf* format.
+
+Figures are stored in both *svg* and *pdf* format.
