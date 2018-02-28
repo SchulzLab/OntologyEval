@@ -109,7 +109,7 @@ By providing a the *pngFile* parameter a boxplot will be generated visualzing th
 
 	Rscript computeOntologyScore.R --pngFile="Example.png"
 
-! [Example boxplot] (https://github.com/SchulzLab/OntologyEval/blob/master/README_Figure.png)
+<img src="https://github.com/SchulzLab/OntologyEval/blob/master/README_Figure.png" alt="Drawing" style="width: 120px;"/>
 
 ## Generating Manuscript Figures
 We provide all generated result files and R-Code to recreate the main and supplementary Figures included in the manuscript.  To generate the Figures *ggplot2* needs to be installed.
