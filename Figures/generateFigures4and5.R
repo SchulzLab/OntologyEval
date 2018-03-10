@@ -9,6 +9,7 @@ ggplotDataCombinedFig3a<-ggplotDataCombinedFig3a[which(ggplotDataCombinedFig3a$o
 ggplotDataNoLog<-read.table("Data/ggplotDataNoLog.txt",header=T,sep="\t",stringsAsFactors = F)
 ggplotDataNoLog<-ggplotDataNoLog[which(ggplotDataNoLog$expr.distance=="Spearman"),]
 fontsize=25
+
 ##############
 ###Figure 4###
 ##############
@@ -18,11 +19,45 @@ pcaNoise$Batch<-factor(pcaNoise$Batch,levels=c("Original","Noise"))
 pcaCombat<-read.table("Data/PCA_Combat.txt",header=T)
 pcaCombat$Batch<-factor(pcaCombat$Batch,levels=c("Original","Noise"))
 cbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442")
-pcaPlot34.Original<-ggplot2::ggplot(data=pcaOriginal,aes(x=PC3,y=PC4,color=tissueType_2,shape=Batch))+
+fontsize=20
+
+pcaPlot12.Original<-ggplot2::ggplot(data=pcaOriginal,aes(x=PC1,y=PC2,color=tissueType_2,shape=Batch))+
   geom_point(size=3)+
   theme_bw(fontsize)+
   labs(color="Tissue")+
   ggtitle("(a) Original")+
+  theme(legend.position="none")+
+  scale_colour_manual(values=cbPalette)+
+  scale_shape_manual(values=c(20,20))
+
+pcaPlot12.Original
+
+pcaPlot12.noise<-ggplot2::ggplot(data=pcaNoise,aes(x=PC1,y=PC2,color=tissueType_2,shape=Batch))+
+  geom_point(size=3)+
+  theme_bw(fontsize)+
+  labs(color="Tissue")+
+  ggtitle("(b) Noise")+
+  scale_colour_manual(values=cbPalette)+
+  theme(legend.position="none")+
+  scale_shape_manual(values=c(4,20))
+pcaPlot12.noise
+
+pcaPlot12.combat<-ggplot2::ggplot(data=pcaCombat,aes(x=PC1,y=PC2,color=tissueType_2,shape=Batch))+
+  geom_point(size=3)+
+  theme_bw(fontsize)+
+  labs(color="Tissue")+
+  ggtitle("(c) Combat")+
+  labs(shape="Data")+
+  theme(legend.position="none")+
+  scale_colour_manual(values=cbPalette)+
+  scale_shape_manual(values=c(4,20))
+pcaPlot12.combat
+
+pcaPlot34.Original<-ggplot2::ggplot(data=pcaOriginal,aes(x=PC3,y=PC4,color=tissueType_2,shape=Batch))+
+  geom_point(size=3)+
+  theme_bw(fontsize)+
+  labs(color="Tissue")+
+  ggtitle("(d) Original")+
   theme(legend.position="none")+
   scale_colour_manual(values=cbPalette)+
   scale_shape_manual(values=c(20,20))
@@ -33,9 +68,10 @@ pcaPlot34.noise<-ggplot2::ggplot(data=pcaNoise,aes(x=PC3,y=PC4,color=tissueType_
   geom_point(size=3)+
   theme_bw(fontsize)+
   labs(color="Tissue")+
-  ggtitle("(b) Noise")+
+  ggtitle("(e) Noise")+
   scale_colour_manual(values=cbPalette)+
   theme(legend.key.height = unit(0.9,"cm"))+
+  theme(legend.position = "bottom")+
   scale_shape_manual(values=c(4,20))
 pcaPlot34.noise
 
@@ -43,57 +79,54 @@ pcaPlot34.combat<-ggplot2::ggplot(data=pcaCombat,aes(x=PC3,y=PC4,color=tissueTyp
   geom_point(size=3)+
   theme_bw(fontsize)+
   labs(color="Tissue")+
-  ggtitle("(c) Combat")+
+  ggtitle("(f) Combat")+
   labs(shape="Data")+
   theme(legend.position="none")+
   scale_colour_manual(values=cbPalette)+
   scale_shape_manual(values=c(4,20))
 pcaPlot34.combat
 
-Fig4d<-ggplot2::ggplot(ggplotDataCombinedFig3a,aes(x=tissues,y=correlation,fill=status))+
-  geom_bar(stat="summary",position="dodge",fun.y = "mean")+
-  stat_summary(fun.data = mean_se, geom = "errorbar",position="dodge",aes(group=status))+
-  theme_bw(fontsize)+
-  xlab("Tissues")+
-  ylab("Spearman correlation")+
-  labs(fill="Data")+
-  theme(legend.key.height = unit(1.5,"cm"))+ggtitle("(d)")+
-  scale_fill_manual(values=cbPalette)
-Fig4d
+blank<-ggplot2::ggplot()+geom_blank()+theme_void()
 
 pdf("Figure4.pdf",height=12,width=18)
-grid.arrange(pcaPlot34.noise,pcaPlot34.combat,Fig4d,pcaPlot34.Original,
-             layout_matrix=cbind(c(4,2),
-                                 c(4,2),
-                                 c(4,2),
-                                 c(4,2),
-                                 c(4,2),
-                                 c(1,3),
-                                 c(1,3),
-                                 c(1,3),
-                                 c(1,3),
-                                 c(1,3),
-                                 c(1,3)))
+grid.arrange(pcaPlot12.Original,pcaPlot12.noise,pcaPlot12.combat,
+             pcaPlot34.Original,pcaPlot34.noise,pcaPlot34.combat,blank,blank,
+             layout_matrix=cbind(c(1,1,1,1,1,1,1,1,4,4,4,4,4,4,4,4,7),
+                                 c(2,2,2,2,2,2,2,2,5,5,5,5,5,5,5,5,5),
+                                 c(3,3,3,3,3,3,3,3,6,6,6,6,6,6,6,6,8)))
 dev.off()
 
 svg("Figure4.svg",height=12,width=18)
-grid.arrange(pcaPlot34.noise,pcaPlot34.combat,Fig4d,pcaPlot34.Original,
-             layout_matrix=cbind(c(4,2),
-                                 c(4,2),
-                                 c(4,2),
-                                 c(4,2),
-                                 c(4,2),
-                                 c(1,3),
-                                 c(1,3),
-                                 c(1,3),
-                                 c(1,3),
-                                 c(1,3),
-                                 c(1,3)))
+grid.arrange(pcaPlot12.Original,pcaPlot12.noise,pcaPlot12.combat,
+             pcaPlot34.Original,pcaPlot34.noise,pcaPlot34.combat,blank,blank,
+             layout_matrix=cbind(c(1,1,1,1,1,1,1,1,4,4,4,4,4,4,4,4,7),
+                                 c(2,2,2,2,2,2,2,2,5,5,5,5,5,5,5,5,5),
+                                 c(3,3,3,3,3,3,3,3,6,6,6,6,6,6,6,6,8)))
 dev.off()
 
 
+##############
+###Figure 5###
+##############
+fontsize=18
+Fig5<-ggplot2::ggplot(ggplotDataCombinedFig3a,aes(x=tissues,y=correlation,fill=status))+
+  geom_bar(stat="summary",position="dodge",fun.y = "mean")+
+  stat_summary(fun.data = mean_se, geom = "errorbar",position="dodge",aes(group=status))+
+  theme_bw(fontsize)+
+  xlab("")+
+  ylab("Spearman correlation")+
+  labs(fill=" ")+
+  theme(legend.key.height = unit(1.5,"cm"))+
+  scale_fill_manual(values=cbPalette)
 
-blank<-ggplot2::ggplot()+geom_blank()+theme_void()
+pdf("Figure5.pdf",height=6,width=9)
+Fig5
+dev.off()
+
+svg("Figure5.svg",height=6,width=9)
+Fig5
+dev.off()
+
 
 
 
