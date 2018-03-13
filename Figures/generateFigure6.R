@@ -292,15 +292,16 @@ grid.arrange(gtexTCGA.Fig6a,gtexTCGA.Fig6b,gtexTCGA.Fig6c1,gtexTCGA.Fig6c2,layou
                                                                                                c(2,2,4,4,4)))
 dev.off()
 
-cS.m<-read.table("Data/Sup_Fig_Prostate.txt",quote=F,sep="\t",col.names=T,row.names=F)
-
+cS.m<-read.table("Data/Sup_Fig_Prostate.txt",header=T)
+colors<-cbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442")
 figB<-ggplot2::ggplot(cS.m,aes(x=variable,y=value,fill=Tissue))+
   geom_bar(stat="summary",position="dodge",fun.y="mean")+
   theme_bw(15)+
   xlab("")+
   ylab("Mean correlation to prostate samples")+
   stat_summary(fun.data = mean_se, geom = "errorbar",position="dodge")+
-  labs(fill="Tissue")
+  labs(fill="Tissue")+
+  scale_fill_manual(values=colors)
 
 svg("Prostate_Rank_Analysis.svg",width=6,height=6)
 figB
