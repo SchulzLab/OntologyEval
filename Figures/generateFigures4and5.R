@@ -114,7 +114,7 @@ Fig5<-ggplot2::ggplot(ggplotDataCombinedFig3a,aes(x=tissues,y=correlation,fill=s
   stat_summary(fun.data = mean_se, geom = "errorbar",position="dodge",aes(group=status))+
   theme_bw(fontsize)+
   xlab("")+
-  ylab("Spearman correlation")+
+  ylab("Ontology score (Spearman)")+
   labs(fill=" ")+
   theme(legend.key.height = unit(1.5,"cm"))+
   scale_fill_manual(values=cbPalette)
@@ -138,7 +138,7 @@ SupFig4_Bar<-ggplot2::ggplot(ggplotDataCombined.Spearman,aes(x=tissues,y=correla
   facet_grid(ontology ~similarity.measure)+
   theme_bw(fontsize)+
   xlab("Tissues")+
-  ylab("Correlation")+
+  ylab("Ontology score")+
   labs(fill="Data")+
   theme(legend.key.height = unit(1.5,"cm"))+
   scale_fill_manual(values=cbPalette)
@@ -284,7 +284,7 @@ ggplot2::ggplot(ggplotDataNoLog,aes(x=tissues,y=correlation,fill=status))+
   facet_grid(ontology ~similarity.measure)+
   theme_bw(fontsize)+
   xlab("Tissues")+
-  ylab("Correlation")+
+  ylab("Ontology score")+
   labs(fill="Data")+
   theme(legend.key.height = unit(1.5,"cm"))+
   scale_fill_manual(values=cbPalette)
@@ -297,7 +297,7 @@ ggplot2::ggplot(ggplotDataNoLog,aes(x=tissues,y=correlation,fill=status))+
   facet_grid(ontology ~similarity.measure)+
   theme_bw(fontsize)+
   xlab("Tissues")+
-  ylab("Correlation")+
+  ylab("Ontology score")+
   labs(fill="Data")+
   theme(legend.key.height = unit(1.5,"cm"))+
   scale_fill_manual(values=cbPalette)

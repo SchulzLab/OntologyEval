@@ -19,7 +19,7 @@ fig3a<-ggplot2::ggplot(ggplotDataCombinedAdditiveNoise.Fig3,aes(x=status,y=corre
   theme_bw(fontsize)+
   labs(fill=c("Noise[%]"))+
   xlab("Samples with gaussian noise [%]")+
-  ylab("Spearman correlation")+
+  ylab("Ontology score (Spearman)")+
   theme(legend.position = "none")+
   ggtitle("(a)")+
   scale_fill_manual(values=cbPalette)
@@ -41,7 +41,7 @@ fig3b<-ggplot2::ggplot(ggplotDataMeanVariaion.Spearman.Fig3,aes(x=status,y=corre
   theme_bw(fontsize)+
   labs(fill=c("Noise[%]"))+
   xlab("Mean of gaussian noise")+
-  ylab("Spearman correlation")+
+  ylab("Ontology score (Spearman)")+
   theme(legend.position = "none")+
   ggtitle("(b)")+
   scale_fill_manual(values=cbPalette2)
@@ -69,7 +69,7 @@ sup_fig3a<-ggplot2::ggplot(ggplotDataCombinedAdditiveNoise.Spearman,aes(x=status
   facet_grid(ontology ~similarity.measure)+
   labs(fill=c("Noise[%]"))+
   xlab("Percentage of added noise")+
-  ylab("Correlation")+
+  ylab("Ontology score")+
   theme(legend.position="none")+
   ggtitle("(a)")+
   scale_fill_manual(values=cbPalette)
@@ -83,7 +83,7 @@ sup_fig3b<-ggplot2::ggplot(ggplotDataCombinedAdditiveNoise.Spearman,aes(x=tissue
   facet_grid(ontology ~similarity.measure)+
   labs(fill=c("Noise[%]"))+
   xlab("Tisues")+
-  ylab("Correlation")+
+  ylab("Ontology score")+
   theme(legend.key.height = unit(1.5,"cm"))+
   ggtitle("(b)")+
   scale_fill_manual(values=cbPalette)
@@ -96,7 +96,7 @@ sup_fig3c<-ggplot2::ggplot(ggplotDataMeanVariaion.Spearman,aes(x=status,y=correl
   theme_bw(fontsize)+
   facet_grid(ontology ~similarity.measure)+
   xlab("Mean of added gaussian noise")+
-  ylab("Correlation")+
+  ylab("Ontology score")+
   theme(legend.position="none")+
   ggtitle("(c)")+
   scale_fill_manual(values=cbPalette2)
@@ -110,7 +110,7 @@ sup_fig3d<-ggplot2::ggplot(ggplotDataMeanVariaion.Spearman,aes(x=tissues,y=corre
   facet_grid(ontology ~similarity.measure)+
   labs(fill=c("Mean of noise"))+
   xlab("Tisues")+
-  ylab("Correlation")+
+  ylab("Ontology score")+
   theme(legend.key.height = unit(1.5,"cm"))+
   ggtitle("(d)")+
   scale_fill_manual(values=cbPalette2)

@@ -27,7 +27,7 @@ ggplotDataFig5.gtexTCGA<-ggplotDataFig5.gtexTCGA[which(ggplotDataFig5.gtexTCGA$o
   facet_grid(ontology ~similarity.measure)+
   labs(fill="Data")+
   theme(legend.key.height = unit(1.5,"cm"))+
-  xlab(" ")+ylab("Correlation")+
+  xlab(" ")+ylab("Ontology score")+
   ggtitle("(a)")+
   theme(legend.position="none")+
   scale_fill_manual(values=cbPalette)
@@ -40,7 +40,7 @@ gtexTCGA.tissue.specific.Ontology<-ggplot2::ggplot(ggplotDataCombined.Spearman,a
   facet_grid(ontology ~similarity.measure)+
   labs(fill="Data")+
   theme(legend.key.width = unit(1.5,"cm"))+
-  xlab(" ")+ylab("Correlation")+
+  xlab(" ")+ylab("Ontology score")+
   ggtitle("(b)")+
   theme(legend.position="bottom")+
   scale_fill_manual(values=cbPalette)+
@@ -55,7 +55,7 @@ gtexTCGA.tissue.consortia.specific.Ontology<-ggplot2::ggplot(ggplotDataCombined.
   facet_grid(ontology ~ Batch)+
   labs(fill="Data")+
   theme(legend.key.width = unit(1.5,"cm"))+
-  xlab(" ")+ylab("Correlation")+
+  xlab(" ")+ylab("Ontology score")+
   ggtitle("(c)")+
   theme(legend.position="bottom")+
   scale_fill_manual(values=cbPalette)
@@ -231,7 +231,7 @@ gtexTCGA.Fig6a<-ggplot2::ggplot(ggplotDataFig5.gtexTCGA,aes(x=Batch,y=correlatio
   labs(fill="Data")+
   theme(legend.key.height = unit(1.5,"cm"))+
   xlab("")+
-  ylab("Spearman correlation")+
+  ylab("Ontology score (Spearman)")+
   theme(legend.position = "none")+
   scale_fill_manual(values=cbPalette)+
   ggtitle("(a)")
@@ -244,7 +244,7 @@ gtexTCGA.Fig6b<-ggplot2::ggplot(ggplotDataCombined.Spearman.Spearman.Cosine,aes(
   theme_bw(fontsize)+
   labs(fill=" ")+
   theme(legend.key.height = unit(0.75,"cm"))+
-  xlab(" ")+ylab("Spearman correlation")+
+  xlab(" ")+ylab("Ontology score (Spearman)")+
   ggtitle("(b)")+
   theme(legend.position="right")+
   scale_fill_manual(values=cbPalette)+
@@ -291,3 +291,18 @@ grid.arrange(gtexTCGA.Fig6a,gtexTCGA.Fig6b,gtexTCGA.Fig6c1,gtexTCGA.Fig6c2,layou
                                                                                                c(2,2,4,4,4),
                                                                                                c(2,2,4,4,4)))
 dev.off()
+
+cS.m<-read.table("Data/Sup_Fig_Prostate.txt",quote=F,sep="\t",col.names=T,row.names=F)
+
+figB<-ggplot2::ggplot(cS.m,aes(x=variable,y=value,fill=Tissue))+
+  geom_bar(stat="summary",position="dodge",fun.y="mean")+
+  theme_bw(15)+
+  xlab("")+
+  ylab("Mean correlation to prostate samples")+
+  stat_summary(fun.data = mean_se, geom = "errorbar",position="dodge")+
+  labs(fill="Tissue")
+
+svg("Prostate_Rank_Analysis.svg",width=6,height=6)
+figB
+dev.off()
+

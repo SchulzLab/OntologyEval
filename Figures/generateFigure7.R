@@ -32,7 +32,7 @@ ihec.Fig7<-ggplot2::ggplot(ggplotDataFig7.ihec,aes(x=Consortia,y=score,fill=data
   labs(fill=" ")+
   theme(legend.key.height = unit(1.5,"cm"))+
   xlab("")+
-  ylab("Spearman correlation")+
+  ylab("Ontology score (Spearman)")+
   theme(legend.position = "none")+
   scale_fill_manual(values=cbPalette)+
   ggtitle("(a)")
@@ -46,7 +46,7 @@ ihec.tissue.specific.Ontology.Small<-ggplot2::ggplot(sampleTissuesSmallExample,a
   facet_grid(CellType..Condensed.~.)+
   labs(fill=" ")+
   theme(legend.key.height = unit(1.5,"cm"))+
-  xlab(" ")+ylab("Spearman correlation")+
+  xlab(" ")+ylab("Ontology score (Spearman)")+
   theme(legend.position="right")+
   scale_fill_manual(values=cbPalette)+
   ggtitle("(b)")
@@ -68,7 +68,7 @@ ihec.acrossTissues.Ontology<-ggplot2::ggplot(ihec.ontologyScores,aes(x=dataset,y
   facet_grid(ontology ~similarity)+
   labs(fill="Data")+
   theme(legend.key.height = unit(1.5,"cm"))+
-  xlab(" ")+ylab("Correlation")+
+  xlab(" ")+ylab("Ontology score")+
   theme(legend.position="none")+
   scale_fill_manual(values=cbPalette)
 ihec.acrossTissues.Ontology
@@ -89,7 +89,7 @@ ihec.tissue.specific.Ontology<-ggplot2::ggplot(ggplotDataFig7.ihec,aes(x=dataset
   facet_wrap(~CellType..Condensed.,ncol=6)+
   labs(fill="Data")+
   theme(legend.key.width = unit(1.5,"cm"))+
-  xlab(" ")+ylab("Correlation")+
+  xlab(" ")+ylab("Ontology score")+
   theme(legend.position="bottom")+
   scale_fill_manual(values=cbPalette)
 ihec.tissue.specific.Ontology

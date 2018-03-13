@@ -21,7 +21,7 @@ ggplot2::ggplot(combinedData.Figure2,aes(x=random.ontology,y=correlation,fill=ra
   theme_bw(fontsize)+
   stat_compare_means(method="wilcox.test",label="p.signif",comparisons=comp,label.size=3)+
   xlab("")+
-  ylab("Spearman correlation")+
+  ylab("Ontology score (Spearman)")+
   theme(legend.position = "none")+
   scale_fill_manual(values=cbPalette)
 dev.off()
@@ -32,7 +32,7 @@ ggplot2::ggplot(combinedData.Figure2,aes(x=random.ontology,y=correlation,fill=ra
   theme_bw(fontsize)+
   stat_compare_means(method="wilcox.test",label="p.signif",comparisons=comp,label.size=3)+
   xlab("")+
-  ylab("Spearman correlation")+
+  ylab("Ontology score (Spearman)")+
   theme(legend.position = "none")+
   scale_fill_manual(values=cbPalette)
 dev.off()
@@ -45,7 +45,7 @@ supFiga<-ggplot2::ggplot(combinedData,aes(x=tissues,y=correlation,fill=random.on
   geom_boxplot()+theme_bw(fontsize)+
   facet_grid(ontology ~similarity.measure)+
   xlab("Tissue")+
-  ylab("Correlation")+
+  ylab("Ontology score")+
   labs(fill="Ontology")+
   theme(legend.key.height = unit(2,"cm"))+
   ggtitle("(b)")+
@@ -57,7 +57,7 @@ supFigb<-ggplot2::ggplot(combinedData,aes(x=random.ontology,y=correlation,fill=r
   theme_bw(fontsize)+
   stat_compare_means(method="wilcox.test",label="p.signif",comparisons=comp,label.size=3)+
   xlab("")+
-  ylab("Correlation")+
+  ylab("Ontology score")+
   theme(legend.position = "none")+
   ggtitle("(a)")+
   scale_fill_manual(values=cbPalette)
